@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ConsoleApp
 {
-    internal class DataExportJSON : DataExportText
+    public class DataExportJSON : DataExportText
     {
         public bool Indented { get; set; }
         public DataExportJSON(string data, string filePath, string encoding, bool indented) : base(data, filePath, encoding)

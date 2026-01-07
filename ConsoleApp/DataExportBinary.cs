@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ConsoleApp
 {
-    internal class DataExportBinary:DataExport
+    public class DataExportBinary:DataExport
     {
         public int BufferSize { get; set; }
         public DataExportBinary(string data, string filePath, int bufferSize) : base(data, filePath)
