@@ -1,0 +1,38 @@
+1) Добавление нового продукта
+INSERT INTO public."Products" (“ProductID", "ProductName", "Description", "Price", "QuantityInStock") VALUES (?, ?, ?, ?, ?);
+
+Или без id с автоинкриментом INSERT INTO "Products" ("ProductName", "Description", "Price", "QuantityInStock") VALUES
+(‘’,’’, ?, ?); 
+
+2) Обновление цены продукта
+UPDATE "Products"
+SET "Price" = ?
+WHERE "ProductID" = ?;
+
+3) Выбор всех заказов определенного пользователя
+SELECT "OrderID", "UserID", "OrderDate", "Status"
+	FROM public."Orders" WHERE "UserID" = ?;
+
+4) Расчет общей стоимости заказа
+SELECT 
+    od."OrderID",
+    SUM(p."Price" * od."Quantity") AS "TotalByProductPriceXQuantity",
+    SUM(od."TotalCost") AS "TotalByOrderDetails"
+FROM "OrderDetails" od
+JOIN "Products" p ON od."ProductID" = p."ProductID"
+WHERE od."OrderID" = ?
+GROUP BY od."OrderID";
+
+5) Подсчет количества товаров на складе
+SELECT SUM("QuantityInStock") FROM "Products";
+
+6) Получение 5 самых дорогих товаров
+SELECT *
+FROM "Products"
+ORDER BY "Price" DESC
+LIMIT 5;
+
+7) Список товаров с низким запасом (менее 5 штук)
+SELECT *
+FROM "Products"
+WHERE "QuantityInStock" < 5;

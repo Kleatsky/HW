@@ -1,0 +1,74 @@
+CREATE TABLE "Products" (
+"ProductID" SERIAL PRIMARY KEY,
+"ProductName" VARCHAR(255) NOT NULL,
+"Description" TEXT,
+"Price" NUMERIC(10, 2) NOT NULL,
+"QuantityInStock" INTEGER NOT NULL DEFAULT 0
+);
+
+COMMENT ON TABLE "Products" IS 'Продукты';
+COMMENT ON COLUMN "Products"."ProductID" IS 'Основной ключ';
+COMMENT ON COLUMN "Products"."ProductName" IS 'Название продукта';
+COMMENT ON COLUMN "Products"."Description" IS 'Описание';
+COMMENT ON COLUMN "Products"."Price" IS 'Цена';
+COMMENT ON COLUMN "Products"."QuantityInStock" IS 'Количество на складе';
+
+CREATE TABLE "Users" (
+"UserID" SERIAL PRIMARY KEY,
+"UserName" VARCHAR(255) NOT NULL,
+"Email" VARCHAR(255) NOT NULL,
+"RegistrationDate" DATE NOT NULL DEFAULT CURRENT_DATE
+);
+
+COMMENT ON TABLE "Users" IS 'Пользователи';
+COMMENT ON COLUMN "Users"."UserID" IS 'Основной ключ';
+COMMENT ON COLUMN "Users"."UserName" IS 'Имя пользователя';
+COMMENT ON COLUMN "Users"."Email" IS 'Электронная почта';
+COMMENT ON COLUMN "Users"."RegistrationDate" IS 'Дата регистрации';
+
+CREATE TABLE "Orders" (
+"OrderID" SERIAL PRIMARY KEY,
+"UserID" INTEGER NOT NULL,
+"OrderDate" DATE NOT NULL DEFAULT CURRENT_DATE,
+"Status" VARCHAR(255) NOT NULL
+);
+
+COMMENT ON TABLE "Orders" IS 'Заказы';
+COMMENT ON COLUMN "Orders"."OrderID" IS 'Основной ключ';
+COMMENT ON COLUMN "Orders"."UserID" IS 'Внешний ключ';
+COMMENT ON COLUMN "Orders"."OrderDate" IS 'Дата заказа';
+COMMENT ON COLUMN "Orders"."Status" IS 'Статус';
+
+CREATE TABLE "OrderDetails" (
+"OrderDetailID" SERIAL PRIMARY KEY,
+"OrderID" INTEGER NOT NULL,
+"ProductID" INTEGER NOT NULL,
+"Quantity" INTEGER NOT NULL,
+"TotalCost" NUMERIC(10, 2) NOT NULL
+);
+
+COMMENT ON TABLE "OrderDetails" IS 'Детали заказа';
+COMMENT ON COLUMN "OrderDetails"."OrderDetailID" IS 'Основной ключ';
+COMMENT ON COLUMN "OrderDetails"."OrderID" IS 'Внешний ключ';
+COMMENT ON COLUMN "OrderDetails"."ProductID" IS 'Внешний ключ';
+COMMENT ON COLUMN "OrderDetails"."Quantity" IS 'Количество';
+COMMENT ON COLUMN "OrderDetails"."TotalCost" IS 'Общая стоимость';
+
+ALTER TABLE "Orders"
+ADD CONSTRAINT "FK_Orders_Users"
+FOREIGN KEY ("UserID")
+REFERENCES "Users" ("UserID")
+ON DELETE CASCADE;
+
+ALTER TABLE "OrderDetails"
+ADD CONSTRAINT "FK_OrderDetails_Orders"
+FOREIGN KEY ("OrderID")
+REFERENCES "Orders" ("OrderID")
+ON DELETE CASCADE;
+
+ALTER TABLE "OrderDetails"
+ADD CONSTRAINT "FK_OrderDetails_Products"
+FOREIGN KEY ("ProductID")
+REFERENCES "Products" ("ProductID")
+ON DELETE CASCADE;
+
