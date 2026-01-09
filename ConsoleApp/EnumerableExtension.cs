@@ -9,6 +9,13 @@ namespace ConsoleApp
 {
     public static class EnumerableExtension
     {
+        /// <summary>
+        /// Get max value item by delegate
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="collection"></param>
+        /// <param name="convertToNumber"></param>
+        /// <returns></returns>
         public static T GetMax<T>(this IEnumerable collection, Func<T, float> convertToNumber) where T : class
         {
             if (collection == null) return null!;

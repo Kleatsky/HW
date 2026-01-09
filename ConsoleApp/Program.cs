@@ -1,9 +1,12 @@
-﻿namespace ConsoleApp
+﻿using static ConsoleApp.FileSearcher;
+
+namespace ConsoleApp
 {
     internal class Program
     {
         static void Main(string[] args)
         {
+            // Task 1
             var strings = new List<string> { "Word1", "Hellp", "porgramm" };
             Console.WriteLine($"Longest string: {strings.GetMax<string>(s => s.Length)}");
 
@@ -14,11 +17,38 @@
                 new { Name = "Product2", Price = 120.0 }
             };
             var maxPrice = products.GetMax<object>(p => { dynamic d = p; return (float)d.Price; });
-            Console.WriteLine($"Most expancive product {maxPrice}");
+            Console.WriteLine($"Most expancive product {maxPrice}\n");
 
 
 
-            Console.WriteLine("Program Complete.");
+
+            // Task 2-5
+            FileSearcher searcher = new FileSearcher();
+
+            var searchingFile = "test3.txt";
+
+            EventHandler<FileArgs> onFileFound = (sender, e) =>
+            {
+                Console.WriteLine($"File Found: {e.FileName}");
+
+                if (e.FileName == searchingFile)
+                {
+                    Console.WriteLine($"Expected file Found. {e.FileName}");
+                    e.Cancel = true;
+                }
+            };
+
+            // Subscribe
+            searcher.FileFound += onFileFound;
+
+            searcher.Search("TestSearchRepo");
+
+            // UnSubscribe
+            searcher.FileFound -= onFileFound;
+
+
+
+            Console.WriteLine("\nProgram Complete.");
         }
     }
 }
